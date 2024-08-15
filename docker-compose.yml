@@ -1,0 +1,53 @@
+# version: "3.8"
+# services:
+#   backend:
+#     build:
+#       context: ./
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - NODE_ENV=production
+#     volumes:
+#       - .:/usr/src/app
+
+##
+
+# version: '3.8'
+
+# services:
+#   backend:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       - .:/usr/src/app
+#     environment:
+#       - NODE_ENV=production
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+##
+
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
