@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { SECRET_KEY } from "../config/env";
 
 const users: { [key: string]: string } = {}; // Simple in-memory user storage
 
@@ -24,6 +23,5 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  // Create a session or token here, but keep it simple for now
   res.status(200).json({ message: "Login successful" });
 };

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db } from "../config/database";
 import Joi from "joi";
-import { ObjectId } from "mongodb"; // Correctly import ObjectId
+import { ObjectId } from "mongodb";
 
 const router = Router();
 
@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
     await accountsCollection.insertOne({ name });
     res.status(201).json({ message: "Account added" });
   } catch (error) {
-    // Cast error to any to access message
     res.status(400).json({ message: (error as any).message });
   }
 });

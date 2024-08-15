@@ -15,15 +15,14 @@ import path from "path";
 const app = express();
 app.use(express.json());
 
-// i18n configuration
 i18n.configure({
-  locales: ["en", "th"], // Define your supported languages
-  directory: path.join(__dirname, "locales"), // Path to the locales directory
+  locales: ["en", "th"],
+  directory: path.join(__dirname, "locales"),
   defaultLocale: "en",
-  queryParameter: "lang", // Use the lang query parameter to determine language
-  autoReload: true, // Automatically reload language files when they change
-  updateFiles: false, // Do not automatically add missing keys to translation files
-  syncFiles: false, // Do not create missing translation files
+  queryParameter: "lang",
+  autoReload: true,
+  updateFiles: false,
+  syncFiles: false,
   objectNotation: true,
 });
 
@@ -35,8 +34,6 @@ app.use("/api/spending-types", spendingTypeRoutes);
 
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/spending-summary", spendingSummaryRoutes);
-
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/money-averaging", moneyAveragingRoutes);
 

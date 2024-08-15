@@ -5,13 +5,12 @@ import { ObjectId } from "mongodb";
 
 const router = Router();
 
-// Validation schema for reminders
 const reminderSchema = Joi.object({
   accountId: Joi.string().required(),
   spendingTypeId: Joi.string().required(),
   presetAmount: Joi.number().required(),
   description: Joi.string().optional(),
-  dueDate: Joi.date().required(), // Date when the reminder is due
+  dueDate: Joi.date().required(),
 });
 
 // Create a new reminder
@@ -43,7 +42,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get reminders (optionally filtered by accountId or spendingTypeId)
+// Get reminders
 router.get("/", async (req, res) => {
   try {
     const { accountId, spendingTypeId } = req.query;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const rudeWords = ["badword1", "badword2"]; // Add rude words to filter
+const rudeWords = ["badword1", "badword2"];
 
 const filterRudeWords = (text: string) => {
   let filteredText = text;

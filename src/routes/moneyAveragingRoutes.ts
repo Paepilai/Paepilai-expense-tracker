@@ -1,85 +1,10 @@
-// import { Router } from "express";
-// import { db } from "../config/database";
-// import Joi from "joi";
-
-// const router = Router();
-
-// const moneyAveragingSchema = Joi.object({
-//   totalIncome: Joi.number().required(),
-//   startDate: Joi.date().required(),
-//   endDate: Joi.date().required(),
-// });
-
-// router.post("/", async (req, res) => {
-//   try {
-//     const { totalIncome, startDate, endDate } = req.body;
-//     await moneyAveragingSchema.validateAsync({
-//       totalIncome,
-//       startDate,
-//       endDate,
-//     });
-
-//     // Parse dates
-//     const start = new Date(startDate);
-//     const end = new Date(endDate);
-//     const now = new Date();
-
-//     // Ensure the start and end dates are valid
-//     if (start > end) {
-//       throw new Error("Start date must be before end date.");
-//     }
-
-//     // Get total expenses within the date range
-//     const transactionsCollection = db.collection("transactions");
-//     const expenses = await transactionsCollection
-//       .aggregate([
-//         { $match: { date: { $gte: start, $lte: end } } },
-//         { $group: { _id: null, totalAmount: { $sum: "$amount" } } },
-//       ])
-//       .toArray();
-
-//     const totalExpenses = expenses.length > 0 ? expenses[0].totalAmount : 0;
-
-//     // Calculate remaining balance and days remaining
-//     const totalDays = Math.ceil(
-//       (end.getTime() - start.getTime()) / (1000 * 3600 * 24)
-//     );
-//     const daysRemaining = Math.ceil(
-//       (end.getTime() - now.getTime()) / (1000 * 3600 * 24)
-//     );
-
-//     if (daysRemaining < 0) {
-//       throw new Error("End date must be in the future.");
-//     }
-
-//     const remainingBalance = totalIncome - totalExpenses;
-//     const dailyAvailableAmount =
-//       daysRemaining > 0 ? remainingBalance / daysRemaining : remainingBalance;
-
-//     res.status(200).json({
-//       totalIncome,
-//       totalExpenses,
-//       remainingBalance,
-//       daysRemaining,
-//       dailyAvailableAmount: dailyAvailableAmount.toFixed(2),
-//     });
-//   } catch (error) {
-//     res.status(400).json({ message: (error as any).message });
-//   }
-// });
-
-// export default router;
-
-///
-
 import { Router } from "express";
 import { db } from "../config/database";
 import Joi from "joi";
-import axios from "axios"; // Make sure to install axios: npm install axios
+import axios from "axios";
 
 const router = Router();
 
-// Validation schema for query parameters
 const moneyAveragingSchema = Joi.object({
   totalIncome: Joi.number().required(),
   startDate: Joi.date().required(),
@@ -88,13 +13,11 @@ const moneyAveragingSchema = Joi.object({
 
 router.post("/", async (req, res) => {
   try {
-    // Validate request body
     await moneyAveragingSchema.validateAsync(req.body);
 
     const { totalIncome, startDate, endDate } = req.body;
     const currentDate = new Date();
 
-    // Convert startDate and endDate to Date objects
     const start = new Date(startDate);
     const end = new Date(endDate);
 
@@ -104,7 +27,6 @@ router.post("/", async (req, res) => {
         .json({ message: "End date must be after start date." });
     }
 
-    // Calculate days remaining
     const daysRemaining = Math.ceil(
       (end.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)
     );
@@ -119,7 +41,6 @@ router.post("/", async (req, res) => {
 
     const totalExpenses = summaryResponse.data.allTotalAmount || 0;
 
-    // Calculate daily usable money
     const remainingMoney = totalIncome - totalExpenses;
     const dailyAvailableAmount =
       daysRemaining > 0 ? remainingMoney / daysRemaining : remainingMoney;
